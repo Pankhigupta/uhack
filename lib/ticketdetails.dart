@@ -1,83 +1,81 @@
 import 'package:flutter/material.dart';
-import 'package:kodikzee2024/chatbot.dart';
-import 'package:kodikzee2024/voiceas.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Ticket Details',
+      theme: ThemeData(
+        primarySwatch: Colors.teal,
+      ),
+      home: const TicketDetails(),
+    );
+  }
+}
 
 class TicketDetails extends StatefulWidget {
   const TicketDetails({super.key});
 
   @override
-  State<TicketDetails> createState() {
-    return TicketDetailState();
-  }
+  State<TicketDetails> createState() => TicketDetailState();
 }
 
 class TicketDetailState extends State<TicketDetails> {
-  VoiceAssistant _voiceAssistant = VoiceAssistant(isVoiceAssistantEnabled: true, child: Container(),); // Ensure this class has a default constructor
-  bool isVoiceAssistantEnabled = false; // Track if the voice assistant is enabled
+  final TextEditingController _pnrController = TextEditingController();
+  Map<String, dynamic>? ticketDetails;
+  bool isLoading = false;
 
-  // Controllers to hold the text field values
-  TextEditingController _pnrController = TextEditingController();
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _ageController = TextEditingController();
-  TextEditingController _genderController = TextEditingController();
-  TextEditingController _statusController = TextEditingController();
-  TextEditingController _coachController = TextEditingController();
-  TextEditingController _trainNoController = TextEditingController();
-  TextEditingController _trainNameController = TextEditingController();
+  // Function to fetch PNR Status from the API
+  Future<void> fetchPNRStatus(String pnr) async {
+    setState(() {
+      isLoading = true;
+      ticketDetails = null;
+    });
 
-  // Mock data for demonstration
-  final Map<String, Map<String, String>> ticketData = {
-    "12345": {
-      "name": "John Doe",
-      "age": "30",
-      "gender": "Male",
-      "status": "Confirmed",
-      "coach": "B2",
-      "trainNo": "12034",
-      "trainName": "Rajdhani Express"
-    },
-    "67890": {
-      "name": "Jane Smith",
-      "age": "28",
-      "gender": "Female",
-      "status": "Waiting",
-      "coach": "C1",
-      "trainNo": "22345",
-      "trainName": "Shatabdi Express"
-    },
-  };
+    const String apiKey = 'd8f57301a0msh6773338790d5db7p176868jsn0bebba0a353a';
+    const String apiHost = 'irctc-indian-railway-pnr-status.p.rapidapi.com';
 
-  @override
-  void initState() {
-    super.initState();
-    _voiceAssistant.initialize();
-  }
+    try {
+      final url = 'https://$apiHost/getPNRStatus/$pnr';
 
-  // Method to fetch ticket details based on PNR
-  void fetchTicketDetails(String pnr) {
-    final details = ticketData[pnr];
-    if (details != null) {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'x-rapidapi-key': apiKey,
+          'x-rapidapi-host': apiHost,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          ticketDetails = data['data'];
+        });
+      } else {
+        _showError('Invalid PNR or API error: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      _showError('Failed to fetch data: ${e.toString()}');
+    } finally {
       setState(() {
-        _nameController.text = details["name"]!;
-        _ageController.text = details["age"]!;
-        _genderController.text = details["gender"]!;
-        _statusController.text = details["status"]!;
-        _coachController.text = details["coach"]!;
-        _trainNoController.text = details["trainNo"]!;
-        _trainNameController.text = details["trainName"]!;
-      });
-    } else {
-      // If PNR not found, clear all fields
-      setState(() {
-        _nameController.clear();
-        _ageController.clear();
-        _genderController.clear();
-        _statusController.clear();
-        _coachController.clear();
-        _trainNoController.clear();
-        _trainNameController.clear();
+        isLoading = false;
       });
     }
+  }
+
+  // Function to display an error message
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   @override
@@ -89,153 +87,206 @@ class TicketDetailState extends State<TicketDetails> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView( // To handle overflow
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // PNR Number
               const Text(
-                'PNR NO',
+                'Enter PNR Number',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               TextField(
                 controller: _pnrController,
                 decoration: const InputDecoration(
-                  hintText: 'Enter PNR No.',
+                  hintText: 'PNR No.',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
-                  fetchTicketDetails(_pnrController.text);
+                  if (_pnrController.text.isNotEmpty) {
+                    fetchPNRStatus(_pnrController.text);
+                  } else {
+                    _showError('Please enter a PNR number.');
+                  }
                 },
-                child: const Text('Fetch Ticket Details'),
+                child: isLoading
+                    ? const CircularProgressIndicator(
+                  color: Colors.white,
+                )
+                    : const Text('Fetch Ticket Details'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.teal,
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Name
-              const Text(
-                'Name',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  hintText: 'Your Name',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Age
-              const Text(
-                'Age',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _ageController,
-                decoration: const InputDecoration(
-                  hintText: 'Your Age',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Gender
-              const Text(
-                'Gender',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _genderController,
-                decoration: const InputDecoration(
-                  hintText: 'Your Gender',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Status
-              const Text(
-                'Status',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _statusController,
-                decoration: const InputDecoration(
-                  hintText: 'Ticket Status',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Coach Number
-              const Text(
-                'Coach NO.',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _coachController,
-                decoration: const InputDecoration(
-                  hintText: 'Your Coach No.',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Train Number
-              const Text(
-                'Train NO.',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _trainNoController,
-                decoration: const InputDecoration(
-                  hintText: 'Your Train No.',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Train Name
-              const Text(
-                'Train Name',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _trainNameController,
-                decoration: const InputDecoration(
-                  hintText: 'Your Train Name',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 20),
+              ticketDetails != null
+                  ? _buildTicketDetailsTable()
+                  : const Text('Enter a PNR number to fetch details.'),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Chatbot()),
+    );
+  }
+
+  // Build a table to display ticket details
+  Widget _buildTicketDetailsTable() {
+    // Extract data from the ticketDetails map
+    final List<dynamic> passengers = ticketDetails!['passengerList'] ?? [];
+    final String trainNo = ticketDetails!['trainNumber'] ?? 'N/A';
+    final String trainName = ticketDetails!['trainName'] ?? 'N/A';
+    final String boardingPoint = ticketDetails!['boardingPoint'] ?? 'N/A';
+    final String arrivalDate = ticketDetails!['arrivalDate'] ?? 'N/A';
+
+    return Table(
+      border: TableBorder.all(color: Colors.black),
+      children: [
+        // Header Row
+        const TableRow(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Train No',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Train Name',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Boarding Point',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Arrival Date',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        // Train Details Row
+        TableRow(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(trainNo),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(trainName),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(boardingPoint),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(arrivalDate),
+            ),
+          ],
+        ),
+        const TableRow(children: [
+          TableCell(child: Divider()),
+          TableCell(child: Divider()),
+          TableCell(child: Divider()),
+          TableCell(child: Divider()),
+        ]),
+        // Passenger Details Header
+        const TableRow(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'S.No',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Booking Status',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Coach Position',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Berth No',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+        // Passenger Details Rows
+        ...List.generate(passengers.length, (index) {
+          final passenger = passengers[index];
+          return TableRow(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text((index + 1).toString()), // S.No
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child:
+                Text(passenger['currentStatus'] ?? 'N/A'), // Booking Status
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(passenger['passengerCoachPosition'].toString() ??
+                    'N/A'), // Coach Position
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(passenger['currentBerthNo'].toString() ??
+                    'N/A'), // Berth No
+              ),
+            ],
           );
-        },
-        shape: CircleBorder(),
-        child: Icon(Icons.chat),
-      ),
+        }),
+        if (passengers.isEmpty)
+          const TableRow(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child:
+                Text('No passengers', style: TextStyle(color: Colors.grey)),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('N/A', style: TextStyle(color: Colors.grey)),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('N/A', style: TextStyle(color: Colors.grey)),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('N/A', style: TextStyle(color: Colors.grey)),
+              ),
+            ],
+          ),
+      ],
     );
   }
 }

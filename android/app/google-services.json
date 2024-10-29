@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "246405673904",
+    "project_id": "yatripath-c5077",
+    "storage_bucket": "yatripath-c5077.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:246405673904:android:f9c00c3c674f0d17049c75",
+        "android_client_info": {
+          "package_name": "com.example.kodikzee2024"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJQeudOk4MldU7twhH8GZD0vGC8zWDUG8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -55,7 +55,10 @@ class HomepageState extends State<Homepage> {
     } else if (command.toLowerCase().contains('live navigation')) {
       Navigator.push(context, MaterialPageRoute(builder: (context) =>Livenavigation()));
       _voiceAssistant.speak('Opening Live Navigation');
-    } else if (command.toLowerCase().contains('ticket details')) {
+    } else if (command.toLowerCase().contains('three d Navigation')) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) =>Navigation(url: 'https://app.mappedin.com/map/6713bcf7b9e00d000ba6d5ad')));
+      _voiceAssistant.speak('Opening 3D Navigation');}
+    else if (command.toLowerCase().contains('ticket details')) {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const TicketDetails()));
       _voiceAssistant.speak('Showing Ticket Details');
@@ -143,7 +146,7 @@ class HomepageState extends State<Homepage> {
     'English': {
       'appbartitle': 'YatriPath',
       'subtitle': 'Your Station Your Way',
-      'trainInfo': 'Train Information',
+      'trainInfo': 'Navigate to Coach',
       'currentStation': 'Current Station',
       'Source station': 'Source station',
       'Destination station': 'Destination station',
@@ -169,7 +172,7 @@ class HomepageState extends State<Homepage> {
     'Hindi': {
       'appbartitle':'यात्रीपथ',
       'subtitle': 'आपका स्टेशन आपकी राह',
-      'trainInfo': 'ट्रेन जानकारी',
+      'trainInfo': 'कोच पर नेविगेट करें',
       'currentStation': 'वर्तमान स्टेशन',
       'Source station': 'स्रोत स्टेशन',
       'Destination station': 'गंतव्य स्टेशन',
