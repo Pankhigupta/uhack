@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Railways - Kiosk Page</title>
+    <link rel="stylesheet" href="layout.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <style>
+        /* Ensure sufficient color contrast for buttons */
+        .button-container button, label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #005A9E; /* Darker blue for contrast */
+            color: #ffffff; /* White text for contrast */
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+
+        .button-container button:hover, label:hover {
+            background-color: #003f7d; /* Darker hover color for better visual feedback */
+        }
+
+        /* Style for QR image */
+        #qr-code img {
+            display: none; /* Initially hidden */
+            width: 100%;
+            height: auto;
+        }
+
+        /* Show the image when input checkbox is checked */
+        #show-qr-checkbox:checked + label + img {
+            display: block;
+        }
+
+        /* Modal styling */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Higher opacity for better visibility */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            text-align: center;
+        }
+
+        .modal-content a {
+            text-decoration: none;
+            color: #007BFF;
+            display: block;
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .modal-content a:focus {
+            outline: 2px solid #005A9E; /* Ensure links can be navigated via keyboard */
+        }
+
+        /* Close button inside modal */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Increase the size of input elements for better accessibility */
+        select, input {
+            font-size: 16px;
+        }
+        .layout{
+            padding: 20px;
+            margin: 10%;
+        }
+        #s2{
+            padding: 20px;
+            font-size: medium;
+            color: #9e0000;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <img src="logo.jfif" alt="Indian Railways logo" class="logo" aria-label="Indian Railways logo">
+            <div class="site-title">
+                <h1 id="h1">YatriPath</h1>
+            </div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <nav>
+            <ul>
+                <li><a href="kiosk.html" aria-label="Home page"><i class="fas fa-home" aria-hidden="true"></i><span class="sr-only">Home</span></a></li>
+                <li><a href="about.html" id="title" aria-label="About us section">About Us</a></li>
+                <li><a href="#language"><i class="fas fa-language" aria-hidden="true"></i><span class="sr-only">Language selector</span></a>
+                    <select name="language" id="language-selector" aria-label="Select language">
+                        <option value="en">English</option>
+                        <option value="hin">हिंदी</option>
+                    </select>
+                </li>
+                <li><a href="#menu"><i class="fas fa-bars" aria-hidden="true"></i><span class="sr-only">Menu</span></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <marquee id="s2" aria-live="polite">NO LIVE UPDATES YET!!!</marquee>
+
+    <!-- Main Layout: Sidebar and Main Content -->
+    <div class="layout" role="main">
+        <!-- Sidebar Section -->
+        <aside aria-labelledby="sidebar-title">
+            <h2 id="s3">Hello Passenger<i class="fas fa-hello" aria-hidden="true"></i></h2>
+            <div id="qr-code">
+                <!-- Hidden checkbox to control QR display -->
+                <input type="checkbox" id="show-qr-checkbox" style="display: none;" aria-hidden="true">
+                <label for="show-qr-checkbox" class="button-style" id="s4">Show QR for Kiosk Location</label>
+                
+                <!-- QR Code image (initially hidden) -->
+                <img src="QR.jfif" alt="Kiosk location QR Code">
+            </div>
+        </aside>
+
+        <!-- Main Content Section -->
+        <main>
+            <h2 id="s5">YatriPath Services</h2>
+            <p id="pargr">Welcome to the Indian Railways kiosk. Use the options below for further navigation:</p>
+
+            <!-- Buttons for Interaction -->
+            <div class="button-container">
+                <!-- Show QR button as label connected to the checkbox -->
+                <label for="show-qr-checkbox" class="button-style" id="s6">Show QR Code</label>
+                <button id="getdirections" aria-label="getdirections" id="getdirections">Get Directions</button>
+                <button id="Others" aria-label="Other Services" onclick="document.location='final.html'">Ticket Details</button>
+            </div>
+        </main>
+    </div>
+    
+
+    <!-- Modal for Directions Options -->
+    <div id="directionsModal" class="modal" role="dialog" aria-labelledby="modaltitle" aria-hidden="true">
+        <div class="modal-content">
+            <span class="close" role="button" tabindex="0" aria-label="Close">&times;</span>
+            <h2 id="modaltitle">Select View</h2>
+            <a href="https://app.mappedin.com/map/671212dde85d7e000b52491b" target="_blank" aria-label="3D View" id="s7">3D View</a>
+            <a href="navl.html" target="_blank" aria-label="Pathfinding" id="s8">Pathfinding</a>
+            <a href="map4.html" target="_blank" aria-label="Map View" id="s9">Map View</a>
+        </div>
+    </div>
+
+    <script>
+        // Get modal element
+        var modal = document.getElementById("directionsModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("getdirections");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+            modal.style.display = "block";
+            modal.setAttribute("aria-hidden", "false"); // Make modal visible for screen readers
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+            modal.setAttribute("aria-hidden", "true"); // Hide modal from screen readers
+        }
+
+        // Close the modal when the user presses ESC key
+        window.onkeydown = function(event) {
+            if (event.key === "Escape") {
+                modal.style.display = "none";
+                modal.setAttribute("aria-hidden", "true");
+            }
+        }
+        window.watsonAssistantChatOptions = {
+          integrationID: "b0d23a21-d4c9-488f-9a10-af88029200b9", // The ID of this integration.
+          region: "au-syd", // The region your integration is hosted in.
+          serviceInstanceID: "e60fc21d-6ed4-4442-afe0-502802045ace", // The ID of your service instance.
+          onLoad: async (instance) => { await instance.render(); }
+        };
+        setTimeout(function(){
+          const t=document.createElement('script');
+          t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+          document.head.appendChild(t);
+        });
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>

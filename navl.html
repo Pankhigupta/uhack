@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <title>Railway Station Navigation</title>
+    <style>
+        .button-container button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #005A9E; /* Darker blue for contrast */
+            color: #ffffff; /* White text for contrast */
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+
+        .button-container button:hover, label:hover {
+            background-color: #003f7d; /* Darker hover color for better visual feedback */
+        }
+        .qr {
+            display: none;
+        }
+        .hover-group:hover .qr {
+            display: block;
+        }
+        path {
+            stroke: red;
+            stroke-width: 4;
+            fill: none;
+        }
+        .walkway {
+            fill: #EFEFEF;
+            stroke: #B0B0B0;
+            stroke-width: 2;
+        }
+        .qr-code {
+            cursor: pointer;
+        }
+        body{
+            display: flex;
+        }
+
+        /* Styling form elements */
+        label {
+            font-weight: bold;
+            color: #333;               /* Dark text for labels */
+            margin-bottom: 5px;
+        }
+
+        select {
+            width: 100%;               /* Full-width dropdown */
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #5a9;    /* Green border */
+            border-radius: 8px;
+            background-color: #fff;    /* White background */
+            color: #333;
+            font-size: 16px;
+        }
+
+        /* Styling the button */
+        button {
+            background-color: #5a9;    /* Green button background */
+            color: white;              /* White text */
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease; /* Smooth color transition */
+        }
+
+        button:hover {
+            background-color: #47a;    /* Darker green on hover */
+        }
+
+        /* Overlay styling */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            display: none;             /* Hidden by default */
+        }
+        .fc {
+            background-color: #f0f4f8; /* Light blue background */
+            border-radius: 15px;       /* Rounded corners */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Drop shadow */
+            padding: 30px;             /* Padding inside the box */
+            max-width: 400px;          /* Set max width */
+            margin: 50px auto;         /* Centering the box */
+            text-align: center;        /* Center text */
+            
+        }
+
+        /* Styling the form header */
+        h2 {
+            color: #333;               /* Dark gray text */
+            font-family: Arial, sans-serif;
+            margin-bottom: 20px;
+        }
+
+        /* Styling form elements */
+        label {
+            font-weight: bold;
+            color: #333;               /* Dark text for labels */
+            margin-bottom: 5px;
+            display: block;            /* Ensure label is above the input */
+        }
+
+        select {
+            width: 100%;               /* Full-width dropdown */
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #5a9;    /* Green border */
+            border-radius: 8px;
+            background-color: #fff;    /* White background */
+            color: #333;
+            font-size: 16px;
+        }
+
+        /* Styling the button */
+        button {
+            background-color: #5a9;    /* Green button background */
+            color: white;              /* White text */
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease; /* Smooth color transition */
+            width: 100%;               /* Full-width button */
+        }
+
+        button:hover {
+            background-color: #47a;    /* Darker green on hover */
+        }
+
+        /* Overlay styling */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            display: none;             /* Hidden by default */
+        }
+        .svg-container {
+            flex: 1; /* Allow the SVG to take available space */
+            height: 100vh; /* Full height */
+        }
+
+        .fc {
+            background-color: #f0f4f8; /* Light blue background */
+            border-radius: 15px; /* Rounded corners */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Drop shadow */
+            padding: 30px; /* Padding inside the box */
+            max-width: 400px; /* Set max width */
+            margin: 50px; /* Centering the box */
+            text-align: center; /* Center text */
+        }
+        /* #back{
+            margin:500%;
+            
+        } */
+    </style>
+</head>
+<body>
+<div class="svg-container">  
+    <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    version="1.1" 
+    width="100%" 
+    height="100%" 
+    viewBox="0 0 1200 800" 
+    preserveAspectRatio="xMidYMid meet"
+    style="display: block; margin: 0; padding: 0; width: 100vw; height: 100vh; ">
+    
+    <!-- Title and Info Section -->
+    <text x="50%" y="40" font-size="28" font-family="Arial" text-anchor="middle" fill="#3E3E3E">
+        Allahabad Railway Station (ALD)
+    </text>
+    <text x="50%" y="70" font-size="16" font-family="Arial" text-anchor="middle" fill="#555">
+        Railway Enquiry: ☎️ 139
+    </text>
+
+    <!-- Major Roads -->
+    <rect x="0" y="120" width="1200" height="40" fill="#DADADA" />
+    <text x="600" y="145" font-size="18" font-family="Arial" text-anchor="middle">Kamla Nehru Road</text>
+
+    <rect x="0" y="700" width="1200" height="40" fill="#DADADA" />
+    <text x="600" y="725" font-size="18" font-family="Arial" text-anchor="middle">Smith Road</text>
+
+    <!-- Platforms -->
+    <g fill="#8BC34A">
+        <rect x="80" y="200" width="80" height="400" id="platform1" />
+        <rect x="180" y="200" width="80" height="400" id="platform2" />
+        <rect x="280" y="200" width="80" height="400" id="platform3" />
+        <rect x="380" y="200" width="80" height="400" id="platform4" />
+        <rect x="480" y="200" width="80" height="400" id="platform5" />
+        <rect x="580" y="200" width="80" height="400" id="platform6" />
+        <rect x="680" y="200" width="80" height="400" id="platform7" />
+        <rect x="780" y="200" width="80" height="400" id="platform8" />
+        <rect x="880" y="200" width="80" height="400" id="platform9" />
+        <rect x="980" y="200" width="80" height="400" id="platform10" />
+    </g>
+
+    <!-- Platform Labels -->
+    <g font-family="Arial" font-size="16" fill="#000">
+        <text x="120" y="190" text-anchor="middle" id="p1">Platform 1</text>
+        <text x="220" y="190" text-anchor="middle" id="p2">Platform 2</text>
+        <text x="320" y="190" text-anchor="middle" id="p3">Platform 3</text>
+        <text x="420" y="190" text-anchor="middle" id="p4">Platform 4</text>
+        <text x="520" y="190" text-anchor="middle" id="p5">Platform 5</text>
+        <text x="620" y="190" text-anchor="middle" id="p6">Platform 6</text>
+        <text x="720" y="190" text-anchor="middle" id="p7">Platform 7</text>
+        <text x="820" y="190" text-anchor="middle" id="p8">Platform 8</text>
+        <text x="920" y="190" text-anchor="middle" id="p9">Platform 9</text>
+        <text x="1020" y="190" text-anchor="middle" id="p10">Platform 10</text>
+    </g>
+
+    <!-- Facilities on Platforms with Hover for QR Codes -->
+    <g class="hover-group">
+        <!-- Platform 1: Drinking Water -->
+        <!-- <rect x="100" y="250" width="40" height="40" rx="5" ry="5" fill="#2196F3" /> -->
+        <text x="120" y="300" font-family="Arial" font-size="30" fill="#FFF" text-anchor="middle">💧</text>
+        <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Drinking%20Water%20at%20Platform%201&amp;size=100x100" x="80" y="300" width="100" height="100" />
+    </g>
+
+    <g class="hover-group">
+        <!-- Platform 2: Kiosk -->
+        <!-- <circle cx="220" cy="440" r="15" fill="#FF5722" /> -->
+        <text x="220" y="440" font-family="Arial" font-size="20"  fill="#000" text-anchor="middle">KIOSK</text><defs>
+            <!-- Add gradient for a polished pin look -->
+            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#FF8A50;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#FF5722;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+        
+        <!-- Pin-pointing location icon -->
+        <path d="M220 400
+        <!--C205 420, 235 420, 220 450   Curves for the pin body -->
+                 A10 15 0 1 1 220 400        <!-- Circular top part -->
+                 Z" 
+              fill="url(#grad1)" 
+              stroke="#D84315" 
+              stroke-width="2" />
+        
+        <!-- Optional: Inner circle to represent the center point -->
+        <circle cx="220" cy="420" r="7" fill="#fff" stroke="#D84315" stroke-width="2" />
+        <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Kiosk%20at%20Platform%202&amp;size=100x100" x="200" y="450" width="100" height="100" />
+    </g>
+
+    <g class="hover-group">
+        <!-- Platform 3: Accessible Ramp -->
+        <!-- <rect x="300" y="360" width="40" height="30" fill="#4CAF50" /> -->
+        <text x="320" y="275" font-family="Arial" font-size="30" fill="#FFF" text-anchor="middle">♿</text>
+        <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Ramp%20at%20Platform%203&amp;size=100x100" x="280" y="380" width="100" height="100" />
+    </g>
+
+    <g class="hover-group">
+        <!-- Platform 4: Restroom -->
+        <!-- <rect x="400" y="500" width="30" height="30" fill="#795548" /> -->
+        <text x="415" y="500" font-family="Arial" font-size="30" fill="#FFF" text-anchor="middle">🚻</text>
+        <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Restroom%20at%20Platform%204&amp;size=100x100" x="380" y="290" width="100" height="100" />
+    </g>
+
+    <g class="hover-group">
+        <!-- Platform 5: ATM -->
+        <!-- <circle cx="520" cy="380" r="15" fill="#673AB7" /> -->
+        <text x="520" y="385" font-family="Arial" font-size="35" fill="#FFF" text-anchor="middle">🏧</text>
+        <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=ATM%20at%20Platform%205&amp;size=100x100" x="500" y="400" width="100" height="100" />
+    </g>
+
+    <g class="hover-group">
+        <!-- Platform 6: Waiting Room -->
+        <text x="620" y="300" font-family="Arial" font-size="35" fill="#FFF" text-anchor="middle">🛋️</text>
+        <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Waiting%20Room%20at%20Platform%206&amp;size=100x100" 
+            x="580" y="320" width="100" height="100" />
+    </g>
+
+    <g class="hover-group">
+        <!-- Platform 7: Cloak Room -->
+        <text x="720" y="460" font-family="Arial" font-size="35" fill="#FFF" text-anchor="middle">🧳</text>
+        <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Cloak%20Room%20at%20Platform%207&amp;size=100x100" 
+            x="680" y="350" width="100" height="100" />
+    </g>
+
+    <g class="hover-group">
+        <!-- Platform 8: Station Master Room -->
+        <text x="820" y="280" font-family="Arial" font-size="35" fill="#FFF" text-anchor="middle">👮</text>
+        <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Station%20Master%20Room%20at%20Platform%208&amp;size=100x100" 
+            x="780" y="300" width="100" height="100" />
+    </g>
+
+    <g class="hover-group">
+        <!-- Platform 9: Food Court -->
+        <text x="920" y="500" font-family="Arial" font-size="35" fill="#FFF" text-anchor="middle">🍔</text>
+        <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Food%20Court%20at%20Platform%209&amp;size=100x100" 
+            x="880" y="370" width="100" height="100" />
+    </g>
+
+    <g class="hover-group">
+        <!-- Platform 10: Ticket Counter -->
+        <text x="1020" y="280" font-family="Arial" font-size="35" fill="#FFF" text-anchor="middle">🎫</text>
+        <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Ticket%20Counter%20at%20Platform%2010&amp;size=100x100" 
+            x="980" y="300" width="100" height="100" />
+    </g>
+        
+    <!-- Entrance -->
+    <g class="hover-group">
+        <text x="0" y="245" font-family="Arial" font-size="20" fill="#000" text-anchor="middle">🚪Entrance/Exit</text>
+    </g>
+    <g class="hover-group">
+        <text x="1150" y="568" font-family="Arial" font-size="20" fill="#000" text-anchor="middle">🚪Entrance/Exit</text>
+    </g>
+
+    <!-- Escalators -->
+    <g class="hover-group">
+        <text x="300" y="550" font-family="Arial" font-size="20" fill="#000" text-anchor="middle">⬆️</text>
+    </g>
+    <g class="hover-group">
+        <text x="900" y="270" font-family="Arial" font-size="20" fill="#000" text-anchor="middle">⬆️</text>
+    </g>
+    
+    
+    <!-- Walkways -->
+    <g fill="#FFC107">
+        <rect x="80" y="390" width="1000" height="20" />
+        <rect x="80" y="550" width="1000" height="20" />
+    </g>
+
+    <!-- Path Result Display -->
+    <path id="path-result" />
+
+    </svg>
+</div>
+<!-- User Input Section for Navigation -->
+ <div class="fc">
+    <form>
+        <div style="text-align: center; margin-top: 20px; padding:70px ;">
+        <label for="start">From </label>
+        <select id="start">
+            <option value="platform1">platform1</option>
+            <option value="platform2">platform2</option>
+            <option value="platform3">platform3</option>
+            <option value="platform4">platform4</option>
+            <option value="platform5">platform5</option>
+            <option value="platform6">platform6</option>
+            <option value="platform7">platform7</option>
+            <option value="platform8">platform8</option>
+            <option value="platform9">platform9</option>
+            <option value="platform10">platform10</option>
+            <option value="entrance">entrance</option>
+            <option value="waitingArea">waitingArea</option>
+            <option value="restroom">restroom</option>
+            <option value="ticketCounter">ticketCounter</option>
+            <option value="atm">atm</option>
+        </select><br><br>
+        <!-- <option value="atm"></option>
+        <option value="atm"></option>
+        <option value="atm"></option> -->
+
+        
+        <label for="end">To </label>
+        <select id="end">
+            <option value="platform1">platform1</option>
+            <option value="platform2">platform2</option>
+            <option value="platform3">platform3</option>
+            <option value="platform4">platform4</option>
+            <option value="platform5">platform5</option>
+            <option value="platform6">platform6</option>
+            <option value="platform7">platform7</option>
+            <option value="platform8">platform8</option>
+            <option value="platform9">platform9</option>
+            <option value="platform10">platform10</option>
+            <option value="entrance">entrance</option>
+            <option value="waitingArea">waitingArea</option>
+            <option value="restroom">restroom</option>
+            <option value="ticketCounter">ticketCounter</option>
+            <option value="atm">atm</option>
+        </select><br><br>
+
+        <button onclick="suggestPath(),pauseScreenUntilRefresh();" id="path">Find Path</button>
+        
+
+        
+        </div>
+        
+    </form>
+</aside>
+<div class="button-container" >
+    <button  onclick="document.location='exp.html'" id="back">Back</button>
+</div>
+
+<script>
+    const nodes = {
+        platform1: { x: 120, y: 400 },
+        platform2: { x: 220, y: 400 },
+        platform3: { x: 320, y: 400 },
+        platform4: { x: 420, y: 400 },
+        platform5: { x: 520, y: 400 },
+        platform6: { x: 620, y: 400 },
+        platform7: { x: 720, y: 400 },
+        platform8: { x: 820, y: 400 },
+        platform9: { x: 920, y: 400 },
+        platform10: { x: 1020, y: 400 },
+        atm: { x: 520, y: 380 },
+        restroom: { x: 415, y: 500 },
+        foodCourt: { x: 620, y: 250 },
+        waitingArea: { x: 750, y: 470 },
+        entrance: { x: 100, y: 250 },
+        exit: { x: 1050, y: 100 },
+        ticketCounter: { x: 1020, y: 300 }
+        
+    };
+
+    const edges = {
+        platform1: [{ node: 'platform2', weight: 100 }, { node: 'entrance', weight: 200 }],
+        platform2: [{ node: 'platform1', weight: 100 }, { node: 'platform3', weight: 100 }],
+        platform3: [{ node: 'platform2', weight: 100 }, { node: 'platform4', weight: 100 }],
+        platform4: [{ node: 'platform3', weight: 100 }, { node: 'platform5', weight: 100 }],
+        platform5: [{ node: 'platform4', weight: 100 }, { node: 'platform6', weight: 100 }],
+        platform6: [{ node: 'platform5', weight: 100 }, { node: 'platform7', weight: 100 }],
+        platform7: [{ node: 'platform6', weight: 100 }, { node: 'platform8', weight: 100 }],
+        platform8: [{ node: 'platform7', weight: 100 }, { node: 'platform9', weight: 100 }],
+        platform9: [{ node: 'platform8', weight: 100 }, { node: 'platform10', weight: 100 }],
+        platform10: [{ node: 'platform9', weight: 100 }],
+        atm: [{ node: 'platform5', weight: 0 }],
+        restroom: [{ node: 'platform3', weight: 150 }],
+        foodCourt: [{ node: 'platform9', weight: 150 }],
+        entrance: [{ node: 'platform1', weight: 200 }],
+        exit: [{ node: 'platform10', weight: 200 }],
+        ticketCounter: [{ node: 'platform6', weight: 100 }]
+    };
+
+    function getDistance(nodeA, nodeB) {
+        const dx = nodeB.x - nodeA.x;
+        const dy = nodeB.y - nodeA.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    function aStar(startNode, endNode) {
+        const openSet = [startNode];
+        const cameFrom = {};
+        const gScore = {};
+        const fScore = {};
+
+        for (let node in nodes) {
+            gScore[node] = Infinity;
+            fScore[node] = Infinity;
+        }
+        gScore[startNode] = 0;
+        fScore[startNode] = getDistance(nodes[startNode], nodes[endNode]);
+
+        while (openSet.length > 0) {
+            let currentNode = openSet.reduce((a, b) => (fScore[a] < fScore[b] ? a : b));
+
+            if (currentNode === endNode) {
+                return reconstructPath(cameFrom, currentNode);
+            }
+
+            openSet.splice(openSet.indexOf(currentNode), 1);
+
+            for (let { node: neighbor, weight } of edges[currentNode]) {
+                let tentative_gScore = gScore[currentNode] + weight;
+
+                if (tentative_gScore < gScore[neighbor]) {
+                    cameFrom[neighbor] = currentNode;
+                    gScore[neighbor] = tentative_gScore;
+                    fScore[neighbor] = gScore[neighbor] + getDistance(nodes[neighbor], nodes[endNode]);
+
+                    if (!openSet.includes(neighbor)) {
+                        openSet.push(neighbor);
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    function reconstructPath(cameFrom, currentNode) {
+        const totalPath = [currentNode];
+
+        while (currentNode in cameFrom) {
+            currentNode = cameFrom[currentNode];
+            totalPath.unshift(currentNode);
+        }
+
+        return totalPath;
+    }
+
+    function suggestPath() {
+        const start = document.getElementById('start').value;
+        const end = document.getElementById('end').value;
+
+        if (!nodes[start] || !nodes[end]) {
+            alert("Invalid locations entered. Please try again.");
+            return;
+        }
+
+        const path = aStar(start, end);
+
+        if (!path) {
+            alert("No valid path found.");
+            return;
+        }
+
+        const svgPath = path.map((node, index) => {
+            const point = nodes[node];
+            return (index === 0 ? 'M' : 'L') + `${point.x},${point.y}`;
+        }).join(' ');
+
+        document.getElementById('path-result').setAttribute('d', svgPath);
+    }
+    function pauseScreenUntilRefresh() {
+    // Disable all user inputs (buttons, fields, etc.)
+    const allElements = document.querySelectorAll('input, button, select, textarea');
+    allElements.forEach(element => {
+        element.disabled = true; // Disable all inputs
+    });
+
+    // Add an overlay to visually block interactions
+    // const overlay = document.createElement('div');
+    // overlay.style.position = 'fixed';
+    // overlay.style.top = '0';
+    // overlay.style.left = '0';
+    // overlay.style.width = '100%';
+    // overlay.style.height = '100%';
+    // overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    // overlay.style.zIndex = '9999';  // Ensure it is on top of everything
+    // overlay.style.display = 'flex';
+    // overlay.style.justifyContent = 'center';
+    // overlay.style.alignItems = 'center';
+    // overlay.style.color = 'white';
+    // overlay.style.fontSize = '24px';
+    // overlay.innerHTML = 'Process completed. Refresh the page to continue.';
+
+    document.body.appendChild(overlay);
+
+    // Optionally listen for F5 key or other refresh actions
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'F5') {
+            location.reload(); // Refresh page on F5
+        }
+    });
+}
+
+
+
+</script>
+<script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<html>
+<head>
+<style>
+   .button-container button, label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #005A9E; /* Darker blue for contrast */
+            color: #ffffff; /* White text for contrast */
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 16px;
+        }
+
+        .button-container button:hover, label:hover {
+            background-color: #003f7d; /* Darker hover color for better visual feedback */
+        }
+</style>
+</head>
+<body>
+<svg 
+  xmlns="http://www.w3.org/2000/svg" 
+  version="1.1" 
+  width="100%" 
+  height="100%" 
+  viewBox="0 0 1200 800" 
+  preserveAspectRatio="xMidYMid meet"
+  style="display: block; margin: 0; padding: 0; width: 100vw; height: 100vh;"
+>
+  <style>
+    /* Styles to show QR codes on hover */
+    .qr {
+      display: none;
+    }
+    .hover-group:hover .qr {
+      display: block;
+    }
+    
+  </style>
+
+  <!-- Background -->
+  <!-- <rect width="100%" height="100%" fill="#F4E8C1" /> -->
+
+  <!-- Title and Info Section -->
+  <text x="50%" y="40" font-size="28" font-family="Arial" text-anchor="middle" fill="#3E3E3E">
+    Allahabad Railway Station (ALD)
+  </text>
+  <text x="50%" y="70" font-size="16" font-family="Arial" text-anchor="middle" fill="#555">
+    Railway Enquiry: ☎️ 139
+  </text>
+
+  <!-- Major Roads -->
+  <rect x="0" y="120" width="1200" height="40" fill="#DADADA" />
+  <text x="600" y="145" font-size="18" font-family="Arial" text-anchor="middle">Kamla Nehru Road</text>
+
+  <rect x="0" y="700" width="1200" height="40" fill="#DADADA" />
+  <text x="600" y="725" font-size="18" font-family="Arial" text-anchor="middle">Smith Road</text>
+  
+  
+  <!-- Platforms -->
+  <g fill="#8BC34A">
+    <rect x="80" y="200" width="80" height="400" />
+    <rect x="180" y="200" width="80" height="400" />
+    <rect x="280" y="200" width="80" height="400" />
+    <rect x="380" y="200" width="80" height="400" />
+    <rect x="480" y="200" width="80" height="400" />
+    <rect x="580" y="200" width="80" height="400" />
+    <rect x="680" y="200" width="80" height="400" />
+    <rect x="780" y="200" width="80" height="400" />
+    <rect x="880" y="200" width="80" height="400" />
+    <rect x="980" y="200" width="80" height="400" />
+  </g>
+
+  <!-- Platform Labels -->
+  <g font-family="Arial" font-size="16" fill="#000">
+    <text x="120" y="190" text-anchor="middle">Platform 1</text>
+    <text x="220" y="190" text-anchor="middle">Platform 2</text>
+    <text x="320" y="190" text-anchor="middle">Platform 3</text>
+    <text x="420" y="190" text-anchor="middle">Platform 4</text>
+    <text x="520" y="190" text-anchor="middle">Platform 5</text>
+    <text x="620" y="190" text-anchor="middle">Platform 6</text>
+    <text x="720" y="190" text-anchor="middle">Platform 7</text>
+    <text x="820" y="190" text-anchor="middle">Platform 8</text>
+    <text x="920" y="190" text-anchor="middle">Platform 9</text>
+    <text x="1020" y="190" text-anchor="middle">Platform 10</text>
+  </g>
+
+  <!-- Facilities on Platforms with Hover for QR Codes -->
+  <g class="hover-group">
+    <!-- Platform 1: Drinking Water -->
+    <!-- <rect x="100" y="250" width="40" height="40" rx="5" ry="5" fill="#2196F3" /> -->
+    <text x="120" y="300" font-family="Arial" font-size="30" fill="#FFF" text-anchor="middle">💧</text>
+    <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Drinking%20Water%20at%20Platform%201&amp;size=100x100" x="80" y="300" width="100" height="100" />
+  </g>
+
+  <g class="hover-group">
+    <!-- Platform 2: Kiosk -->
+    <!-- <circle cx="220" cy="440" r="15" fill="#FF5722" /> -->
+    <text x="220" y="440" font-family="Arial" font-size="20"  fill="#000" text-anchor="middle">KIOSK</text>
+    <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Kiosk%20at%20Platform%202&amp;size=100x100" x="200" y="450" width="100" height="100" />
+  </g>
+
+  <g class="hover-group">
+    <!-- Platform 3: Accessible Ramp -->
+    <!-- <rect x="300" y="360" width="40" height="30" fill="#4CAF50" /> -->
+    <text x="320" y="375" font-family="Arial" font-size="30" fill="#FFF" text-anchor="middle">♿</text>
+    <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Ramp%20at%20Platform%203&amp;size=100x100" x="280" y="380" width="100" height="100" />
+  </g>
+
+  <g class="hover-group">
+    <!-- Platform 4: Restroom -->
+    <!-- <rect x="400" y="500" width="30" height="30" fill="#795548" /> -->
+    <text x="415" y="500" font-family="Arial" font-size="30" fill="#FFF" text-anchor="middle">🚻</text>
+    <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Restroom%20at%20Platform%204&amp;size=100x100" x="380" y="290" width="100" height="100" />
+  </g>
+
+  <g class="hover-group">
+    <!-- Platform 5: ATM -->
+    <!-- <circle cx="520" cy="380" r="15" fill="#673AB7" /> -->
+    <text x="520" y="385" font-family="Arial" font-size="35" fill="#FFF" text-anchor="middle">🏧</text>
+    <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=ATM%20at%20Platform%205&amp;size=100x100" x="500" y="400" width="100" height="100" />
+  </g>
+
+  <g class="hover-group">
+    <!-- Platform 6: Waiting Room -->
+    <text x="620" y="300" font-family="Arial" font-size="35" fill="#FFF" text-anchor="middle">🛋️</text>
+    <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Waiting%20Room%20at%20Platform%206&amp;size=100x100" 
+           x="580" y="320" width="100" height="100" />
+  </g>
+
+  <g class="hover-group">
+    <!-- Platform 7: Cloak Room -->
+    <text x="720" y="460" font-family="Arial" font-size="35" fill="#FFF" text-anchor="middle">🧳</text>
+    <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Cloak%20Room%20at%20Platform%207&amp;size=100x100" 
+           x="680" y="350" width="100" height="100" />
+  </g>
+
+  <g class="hover-group">
+    <!-- Platform 8: Station Master Room -->
+    <text x="820" y="280" font-family="Arial" font-size="35" fill="#FFF" text-anchor="middle">👮</text>
+    <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Station%20Master%20Room%20at%20Platform%208&amp;size=100x100" 
+           x="780" y="300" width="100" height="100" />
+  </g>
+
+  <g class="hover-group">
+    <!-- Platform 9: Food Court -->
+    <text x="920" y="450" font-family="Arial" font-size="35" fill="#FFF" text-anchor="middle">🍔</text>
+    <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Food%20Court%20at%20Platform%209&amp;size=100x100" 
+           x="880" y="370" width="100" height="100" />
+  </g>
+
+  <g class="hover-group">
+    <!-- Platform 10: Ticket Counter -->
+    <text x="1020" y="280" font-family="Arial" font-size="35" fill="#FFF" text-anchor="middle">🎫</text>
+    <image class="qr" href="https://api.qrserver.com/v1/create-qr-code/?data=Ticket%20Counter%20at%20Platform%2010&amp;size=100x100" 
+           x="980" y="300" width="100" height="100" />
+  </g>
+    
+   <!-- Entrance -->
+  <g class="hover-group">
+    <text x="0" y="245" font-family="Arial" font-size="20" fill="#000" text-anchor="middle">🚪Entrance/Exit</text>
+  </g>
+  <g class="hover-group">
+    <text x="1150" y="568" font-family="Arial" font-size="20" fill="#000" text-anchor="middle">🚪Entrance/Exit</text>
+  </g>
+
+  <!-- Escalators -->
+  <g class="hover-group">
+    <text x="300" y="550" font-family="Arial" font-size="20" fill="#000" text-anchor="middle">⬆️</text>
+  </g>
+  <g class="hover-group">
+    <text x="900" y="270" font-family="Arial" font-size="20" fill="#000" text-anchor="middle">⬆️</text>
+  </g>
+ 
+   
+  <!-- Walkways -->
+  <g fill="#FFC107">
+    <rect x="80" y="230" width="1000" height="20" />
+    <rect x="80" y="550" width="1000" height="20" />
+  </g>
+
+  
+
+  <!-- Legend -->
+  <rect x="0" y="630" width="1200" height="50" fill="#FFF" stroke="#000" />
+  <text x="600" y="655" font-size="14" text-anchor="middle" font-family="Arial">
+    Facilities: 💧 Drinking Water | 🛒 Kiosk | ♿ Accessibility | 🚻 Restroom | 🏧 ATM | 🛋️ Waiting Room | 🧳 Cloak Room | 👮 Station Master | 🍔 Food Court | 🎫 Ticket Counter | 🚪 Entrance | ⬆️ Escalator
+  </text>
+   <div class="button-container">
+                <!-- Show QR button as label connected to the checkbox -->
+                
+            </div>
+
+</svg>
+
+   <div class="button-container">
+                  <center><button  onclick="document.location='exp.html'">Back</button></center>
+            </div>
+</body>
+</html>

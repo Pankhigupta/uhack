@@ -1,0 +1,205 @@
+/* General reset and style settings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #003366;
+    color: white;
+    padding: 1rem 0;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 2rem;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 1rem;
+}
+
+.site-title h1 {
+    font-size: 2rem;
+}
+
+nav {
+    background-color: #0066cc;
+    padding: 1rem 0;
+    justify-content: flex-end;
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: right;
+    gap: 2rem;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+}
+
+nav ul li a:hover {
+    background-color: #004c99;
+    border-radius: 5px;
+}
+
+nav ul li img {
+    width: 30px;
+    height: 30px;
+}
+
+.layout {
+    display: flex;
+    margin-right: 100px;
+    padding: 50px;
+    float: center; 
+}
+
+/* Sidebar styles */
+aside {
+    width: 25%;
+    background-color: #e0e0e0;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+aside h2 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+#qr-code {
+    text-align: center;
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+/* Main content styles */
+main {
+    width: 70%;
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+main h2 {
+    color: #003366;
+    margin-bottom: 1rem;
+}
+
+/* Button styles */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+button {
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #004c99;
+}
+
+button:focus {
+    outline: 3px solid #ffcc00;
+}
+
+/* Footer styles */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+footer p {
+    font-size: 1rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    aside, main {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    nav ul {
+        flex-direction: column;
+    }
+
+    .button-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    button {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    /* Button styling for the label */
+.button-style {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px 0;
+}
+
+/* Initially hide the QR code */
+.qr-img {
+    display: none;
+}
+
+/* Show the QR code when the checkbox is checked */
+#toggle-qr:checked + .button-style + .qr-img {
+    display: block;
+}
+
+}
+

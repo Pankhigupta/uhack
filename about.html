@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About YatriPath - Infographics & Diagrams</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            line-height: 1.6;
+        }
+        .button-container button, label {
+            display: inline-block;
+            padding: 30px 40px;
+            background-color: #005A9E; /* Darker blue for contrast */
+            color: #ffffff; /* White text for contrast */
+            border: none;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 25px;
+        }
+
+        .button-container button:hover, label:hover {
+            background-color: #003f7d; /* Darker hover color for better visual feedback */
+        }
+
+
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2rem;
+        }
+
+        /* Main layout */
+        .layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        /* Infographic styles */
+        .infographic-section {
+            margin: 2rem 0;
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .infographic-section h2 {
+            text-align: center;
+            color: #003366;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Flexbox grid for infographic blocks */
+        .infographic-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        /* Infographic card */
+        .infographic-card {
+            background-color: #e0f7fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            width: 30%;
+            margin: 1rem;
+            text-align: center;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .infographic-card img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .infographic-card h3 {
+            color: #007BFF;
+            margin-bottom: 0.5rem;
+        }
+
+        .infographic-card p {
+            color: #555;
+        }
+
+        /* Diagram section */
+        .diagram-section {
+            margin: 2rem 0;
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .diagram-section h2 {
+            text-align: center;
+            color: #003366;
+            margin-bottom: 1.5rem;
+        }
+
+        .diagram {
+            text-align: center;
+            padding: 1rem;
+            background-color: #fafafa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .diagram img {
+            max-width: 80%;
+            height: auto;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .infographic-card {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>About YatriPath</h1>
+        <p>Visualize How We Improve Your Railway Station Navigation Experience</p>
+    </header>
+
+    <!-- Infographic Section -->
+    <div class="layout">
+        <div class="infographic-section">
+            <h2>Our Key Features</h2>
+            <div class="infographic-container">
+                <!-- Infographic 1 -->
+                <div class="infographic-card">
+                    <!-- <img src="https://via.placeholder.com/150" alt="Real-time Updates Infographic"> -->
+                    <h3>Real-Time Updates</h3>
+                    <p>Get instant alerts on platform changes and train schedules through our app's integrated real-time update system.</p>
+                </div>
+
+                <!-- Infographic 2 -->
+                <div class="infographic-card">
+                    <!-- <img src="https://via.placeholder.com/150" alt="3D Navigation Infographic"> -->
+                    <h3>Interactive 3D Navigation</h3>
+                    <p>Navigate stations effortlessly using our interactive 3D maps, designed to show the best routes and important facilities.</p>
+                </div>
+
+                <!-- Infographic 3 -->
+                <div class="infographic-card">
+                    <!-- <img src="https://via.placeholder.com/150" alt="AR Navigation Infographic"> -->
+                    <h3>Augmented Reality (AR) Navigation</h3>
+                    <p>Enhance your experience with live navigation using augmented reality, guiding you to platforms and services efficiently.</p>
+                </div>
+            </div>
+        </div>
+<!-- 
+        Diagram Section -->
+        <div class="diagram-section">
+            <h2>Download our app now and ease your railway station experience</h2>
+            <div class="diagram">
+                <img src="QR.jfif" alt="Website Process Flow Diagram">
+            </div>
+        </div>
+    </div>
+    <div class="button-container" >
+    <button  onclick="document.location='exp.html'" id="back">Back</button>
+</div>
+
+</body>
+</html>

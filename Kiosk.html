@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiosk Page - Indian Railways</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styles */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f7f7f7; /* Light gray background for readability */
+            color: #333;               /* Dark text color for contrast */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        /* Header styles */
+        header {
+            background-color: #003366; /* Dark blue for Indian Railways theme */
+            color: #fff;               /* White text for contrast */
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow effect */
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 1.2px;
+        }
+
+        /* Main content styles */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Button container */
+        .button-container {
+            text-align: center;
+        }
+
+        /* Button styles */
+        button {
+            background-color: #0059b3; /* Indian Railways blue */
+            color: white;              /* White text for contrast */
+            padding: 45px 50px;
+            margin: 70px;
+            font-size: 2.2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #004080; /* Slightly darker blue on hover */
+            transform: scale(1.05);    /* Button grows slightly on hover */
+        }
+
+        button:focus {
+            outline: 3px solid #ffcc00; /* High contrast yellow outline on focus for accessibility */
+        }
+
+        /* Responsive design for mobile */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2rem; /* Smaller font size for mobile */
+            }
+
+            button {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>WELCOME TO INDIAN RAILWAYS</h1>
+    </header>
+    
+    <main>
+        <centre><img src="trainlogo.png" alt="logo" height="300px" width="300px"><centre>
+        <div class="button-container">
+            <button onclick="location.href='#';">General</button>
+            <button onclick="location.href='exp.html'">Navigation</button>
+        </div>
+    </main>
+    <script>
+        window.watsonAssistantChatOptions = {
+            integrationID: "b0d23a21-d4c9-488f-9a10-af88029200b9", // The ID of this integration.
+            region: "au-syd", // The region your integration is hosted in.
+            serviceInstanceID: "e60fc21d-6ed4-4442-afe0-502802045ace", // The ID of your service instance.
+            onLoad: async (instance) => { await instance.render(); }
+        };
+        setTimeout(function(){
+            const t=document.createElement('script');
+            t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+            document.head.appendChild(t);
+        });
+      </script>
+</body>
+</html>

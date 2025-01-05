@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Railways - Ticket Details</title>
+    <link rel="stylesheet" href="layout.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <style>
+        /* Ensure sufficient color contrast for buttons */
+        .button-container button, label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #005A9E;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+
+        .button-container button:hover, label:hover {
+            background-color: #003f7d;
+        }
+
+        /* Increase the size of input elements for better accessibility */
+        select, input {
+            font-size: 16px;
+            padding: 10px;
+            margin-top: 5px;
+        }
+
+        /* Styling for ticket details */
+        #ticket-details {
+            margin-top: 20px;
+            background-color: #f1f1f1;
+            padding: 20px;
+            display: none; /* Initially hidden */
+            border-radius: 5px;
+        }
+
+        /* Style for table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        .input-container {
+            display: flex;
+            background-color: white;
+            padding: 100px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 600px;
+            max-width: 50%;
+            margin: auto;
+            justify-content: center;
+            gap:10px;
+
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <img src="logo.jfif" alt="Indian Railways logo" class="logo" aria-label="Indian Railways logo">
+            <h1 id="h1">YatriPath</h1>
+        </div>
+    </header>
+    <h2 style="text-align: center;">PNR Status</h2><br>
+    <div class="layout" role="main">
+        
+        <div class="input-container">
+            
+            <input type="text" id="pnr-input" placeholder="Enter PNR No." aria-label="PNR number input"><br><br>
+            <button id="fetch-btn" aria-label="Fetch Ticket Details">Fetch Ticket Details</button>
+        </div>
+    </div>
+
+        <!-- Container to display ticket details -->
+        <div id="ticket-details"></div>
+    </div>
+
+    <script>
+        document.getElementById("fetch-btn").addEventListener("click", function() {
+            const pnr = document.getElementById("pnr-input").value.trim();
+            if (pnr) {
+                fetchPNRStatus(pnr);
+            } else {
+                alert("Please enter a PNR number.");
+            }
+        });
+
+        async function fetchPNRStatus(pnr) {
+            
+            const apiKey = '99ccf85947mshc68432a912906b2p10f05cjsne943193465ef';
+            const apiHost = 'irctc-indian-railway-pnr-status.p.rapidapi.com';
+            const url = `https://${apiHost}/getPNRStatus/${pnr}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'x-rapidapi-key': apiKey,
+                        'x-rapidapi-host': apiHost,
+                    },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    displayTicketDetails(data.data);
+                } else {
+                    displayTicketDetails(data.data);
+
+                    alert('Error fetching data: ' + response.statusText);
+                }
+            } catch (error) {
+                alert('Failed to fetch data: ' + error.message);
+            }
+        }
+
+        function displayTicketDetails(details) {
+            const ticketDetailsDiv = document.getElementById("ticket-details");
+            ticketDetailsDiv.style.display = "block";
+
+            let tableHTML = `
+                <h3>Train Information</h3>
+                <table>
+                    <tr>
+                        <th>Train No</th>
+                        <th>Train Name</th>
+                        <th>Boarding Point</th>
+                        <th>Arrival Date</th>
+                    </tr>
+                    <tr>
+                        <td>${details.trainNumber || 'N/A'}</td>
+                        <td>${details.trainName || 'N/A'}</td>
+                        <td>${details.boardingPoint || 'N/A'}</td>
+                        <td>${details.arrivalDate || 'N/A'}</td>
+                    </tr>
+                </table>
+                <h3>Passenger Details</h3>
+                <table>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Booking Status</th>
+                        <th>Coach Position</th>
+                        <th>Berth No</th>
+                    </tr>
+            `;
+
+            const passengers = details.passengerList || [];
+            passengers.forEach((passenger, index) => {
+                tableHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${passenger.currentStatus || 'N/A'}</td>
+                        <td>${passenger.passengerCoachPosition || 'N/A'}</td>
+                        <td>${passenger.currentBerthNo || 'N/A'}</td>
+                    </tr>
+                `;
+            });
+
+            if (passengers.length === 0) {
+                tableHTML += `
+                    <tr>
+                        <td colspan="4">No passengers available</td>
+                    </tr>
+                `;
+            }
+
+            tableHTML += '</table>';
+            ticketDetailsDiv.innerHTML = tableHTML;
+        }
+    </script>
+    <div class="button-container" >
+    <button  onclick="document.location='exp.html'" id="back">Back</button>
+</div>
+</body>
+</html>
